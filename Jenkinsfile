@@ -23,8 +23,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    docker rmi -f hotstar:v1 || true
-                    docker build -t hotstar:v1 -f /var/lib/jenkins/workspace/hotstar/Dockerfile /var/lib/jenkins/workspace/hotstor
+                    docker rmi -f hotstor:v1 || true
+                    docker build -t hotstor:v1 -f /var/lib/jenkins/workspace/hotstor/Dockerfile /var/lib/jenkins/workspace/hotstor
                 '''
             }
         }
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f con8 || true
-                    docker run -d --name con8 -p 8008:8080 hotstar:v1
+                    docker run -d --name con8 -p 8008:8080 hotstor:v1
                 '''
             }
         }
@@ -41,8 +41,8 @@ pipeline {
         stage('Docker Swarm Deploy') {
             steps {
                 sh '''
-                    docker service update --image hotstar:v1 hotstarserv || \
-                    docker service create --name hotstarserv -p 8009:8080 --replicas=10 hotstar:v1
+                    docker service update --image hotstor:v1 hotstarserv || \
+                    docker service create --name hotstarserv -p 8009:8080 --replicas=10 hotstor:v1
                 '''
             }
         }
