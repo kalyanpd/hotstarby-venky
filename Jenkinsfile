@@ -29,6 +29,14 @@ pipeline {
                 '''
             }
         }
+	 stage('Deploy Container') {
+            steps {
+                sh '''
+                    docker rm -f con8 || true
+                    docker run -d --name con8 -p 8008:8080 $DOCKER_USER/${IMAGE_NAME}:latest
+                '''
+            }
+        }
 
         stage('Push to Docker Hub') {
             steps {
@@ -41,15 +49,6 @@ pipeline {
                         docker push $DOCKER_USER/${IMAGE_NAME}:latest
                     '''
                 }
-            }
-        }
-
-        stage('Deploy Container') {
-            steps {
-                sh '''
-                    docker rm -f con8 || true
-                    docker run -d --name con8 -p 8008:8080 $DOCKER_USER/${IMAGE_NAME}:latest
-                '''
             }
         }
 
