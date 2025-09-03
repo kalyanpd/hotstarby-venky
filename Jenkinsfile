@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout code from main branch
-                git branch: 'main', url: 'https://github.com/kalyanpd/hotstarby-venky.git'
+                git branch: 'main', url: 'https://github.com/Naren-05/hotstarby.git'
 
                 // Verify files
                 sh 'pwd'
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 sh '''
                     docker rmi -f hotstar:v1 || true
-                    docker build -t hotstar:v1 -f /var/lib/jenkins/workspace/hoststar_by_venky/Dockerfile 
+                    docker build -t hotstar:v1 -f /var/lib/jenkins/workspace/hotstar/Dockerfile /var/lib/jenkins/workspace/hotstar
                 '''
             }
         }
@@ -33,10 +33,18 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f con8 || true
-                    docker run -d --name con8 -p 8083:8080 hotstar:v1
+                    docker run -d --name con8 -p 8008:8080 hotstar:v1
                 '''
             }
         }
 
+        stage('Docker Swarm Deploy') {
+            steps {
+                sh '''
+                    docker service update --image hotstar:v1 hotstarserv || \
+                    docker service create --name hotstarserv -p 8009:8080 --replicas=10 hotstar:v1
+                '''
+            }
+        }
     }
 }
