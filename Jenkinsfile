@@ -1,5 +1,11 @@
 pipeline {
     agent any
+	
+	environment {
+        DOCKERHUB_USER = 'your-dockerhub-username'
+        DOCKERHUB_REPO = 'hotstar'
+        DOCKERHUB_TAG  = 'v1'
+    }
 
     stages {
         stage('Checkout') {
@@ -29,6 +35,17 @@ pipeline {
             }
         }
 
+	stage('Push to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                        echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+                        docker push $DOCKERHUB_USER/$DOCKERHUB_REPO:$DOCKERHUB_TAG
+                        docker logout
+                    '''
+                }
+            }
+        }
         stage('Deploy Container') {
             steps {
                 sh '''
