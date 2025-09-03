@@ -29,8 +29,10 @@ pipeline {
                 '''
             }
         }
+	
 	 stage('Deploy Container') {
             steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) 
                 sh '''
                     docker rm -f con8 || true
                     docker run -d --name con8 -p 8008:8080 $DOCKER_USER/${IMAGE_NAME}:latest
