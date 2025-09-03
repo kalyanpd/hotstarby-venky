@@ -23,8 +23,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    docker rmi -f hotstar:v1 || true
-                    docker build -t hotstar:v1 -f /var/lib/jenkins/workspace/hoststar_by_venky/Dockerfile 
+                    docker rmi -f hotstor:v1 || true
+                    docker build -t hotstor:v1 -f /var/lib/jenkins/workspace/hoststar_by_venky/Dockerfile /var/lib/jenkins/workspace/hotstor
                 '''
             }
         }
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f con8 || true
-                    docker run -d --name con8 -p 8083:8080 hotstar:v1
+                    docker run -d --name con8 -p 8083:8080 hotstor:v1
                 '''
             }
         }
