@@ -2,7 +2,7 @@ pipeline {
     agent any
 	
 	environment {
-        DOCKERHUB_USER = 'your-dockerhub-username'
+        DOCKERHUB_USER = 'kalyan3599'
         DOCKERHUB_REPO = 'hotstar'
         DOCKERHUB_TAG  = 'v1'
     }
