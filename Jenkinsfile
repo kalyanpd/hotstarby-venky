@@ -41,6 +41,7 @@ pipeline {
         stage('Docker Swarm Deploy') {
             steps {
                 sh '''
+		    docker swarm init
                     docker service update --image hotstar:v1 hotstarserv || \
                     docker service create --name hotstarserv -p 8008:8080 --replicas=10 hotstar:v1
                 '''
