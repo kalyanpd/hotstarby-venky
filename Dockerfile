@@ -1,15 +1,9 @@
-# Use official Tomcat base image
-FROM tomcat:9.0-jdk17
+FROM tomcat:9.0
 
-# Remove default ROOT app (optional, to avoid conflicts)
-RUN rm -rf /usr/local/tomcat/webapps/*
+RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
-# Copy the WAR file from Maven target folder into Tomcat webapps
-COPY target/myapp.war /usr/local/tomcat/webapps/ROOT.war
+COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
 
-# Expose default Tomcat port
 EXPOSE 8080
 
-# Start Tomcat
 CMD ["catalina.sh", "run"]
-
